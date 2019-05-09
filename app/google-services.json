@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "645450858730",
+    "firebase_url": "https://ispy-73cbc.firebaseio.com",
+    "project_id": "ispy-73cbc",
+    "storage_bucket": "ispy-73cbc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645450858730:android:7678f79053ef1131",
+        "android_client_info": {
+          "package_name": "com.empty.ispy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "645450858730-gr8asj4nemheirqc7pkj6rvou8d49sl0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaq1ZunTuyZPSytK7tx0BdKTpfYPH1cFg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645450858730-gr8asj4nemheirqc7pkj6rvou8d49sl0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
