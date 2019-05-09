@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.empty.ispy.Menu.ConThemeAct;
+import com.empty.ispy.Menu.Home;
 import com.empty.ispy.R;
 import com.google.android.gms.signin.SignIn;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,6 +35,13 @@ public class SignInAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser!=null){
+            Intent intent = new Intent(getApplicationContext(), Home.class);
+            startActivity(intent);
+            finish();
+        }
 
 
         bgone = (ImageView) findViewById(R.id.bgone);
@@ -86,6 +95,9 @@ public class SignInAct extends AppCompatActivity {
 
                                 } else {
                                     Toast.makeText(getApplicationContext(),"Success auth", Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(getApplicationContext(), ConThemeAct.class);
+                                    startActivity(intent);
+                                    finish();
 
                                 }
                             }
