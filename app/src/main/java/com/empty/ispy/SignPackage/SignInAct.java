@@ -3,23 +3,36 @@ package com.empty.ispy.SignPackage;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.empty.ispy.Chat.MainActivity;
+import com.empty.ispy.Chat.data.SharedPreferenceHelper;
+import com.empty.ispy.Chat.data.StaticConfig;
+import com.empty.ispy.Chat.model.User;
 import com.empty.ispy.Menu.ConThemeAct;
 import com.empty.ispy.Menu.Home;
 import com.empty.ispy.R;
-import com.google.android.gms.signin.SignIn;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.yarolegovich.lovelydialog.LovelyProgressDialog;
+
+import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public class SignInAct extends AppCompatActivity {
 
@@ -27,13 +40,67 @@ public class SignInAct extends AppCompatActivity {
     Button btnget,btnget2;
     private FirebaseAuth mAuth;
     private EditText inputEmail, inputPassword;
+
+
+
+
+    private static String TAG = "LoginActivity";
+    FloatingActionButton fab;
+    private final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    private EditText editTextUsername, editTextPassword;
+    private LovelyProgressDialog waitingDialog;
+
+
+
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseUser user;
+    private boolean firstTimeAccess;
+    Button signup;
+
 // ...
 // Initialize Firebase Auth
+@Override
+protected void onStop() {
+    super.onStop();
+    if (mAuthListener != null) {
+        mAuth.removeAuthStateListener(mAuthListener);
+    }
+}
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+    private void initFirebase() {
+        //Khoi tao thanh phan de dang nhap, dang ky
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    StaticConfig.UID = user.getUid();
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    if (firstTimeAccess) {
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        SignInAct.this.finish();
+                    }
+                } else {
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                firstTimeAccess = false;
+            }
+        };
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_loginn);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
@@ -94,17 +161,42 @@ public class SignInAct extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Incorrect password or login", Toast.LENGTH_SHORT).show();
 
                                 } else {
+                                    saveUserInfo();
                                     Toast.makeText(getApplicationContext(),"Success auth", Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(getApplicationContext(), ConThemeAct.class);
                                     startActivity(intent);
-                                    finish();
+
 
                                 }
                             }
                         });
             }
         });
-
+        firstTimeAccess = true;
+        initFirebase();
 
     }
+
+    void saveUserInfo() {
+        FirebaseDatabase.getInstance().getReference().child("user/" + StaticConfig.UID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                HashMap hashUser = (HashMap) dataSnapshot.getValue();
+                User userInfo = new User();
+                userInfo.name = (String) hashUser.get("name");
+                userInfo.email = (String) hashUser.get("email");
+                userInfo.avata = (String) hashUser.get("avata");
+                SharedPreferenceHelper.getInstance(SignInAct.this).saveUserInfo(userInfo);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+
 }

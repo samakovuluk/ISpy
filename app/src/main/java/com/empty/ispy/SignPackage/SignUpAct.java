@@ -1,9 +1,12 @@
 package com.empty.ispy.SignPackage;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.empty.ispy.Chat.data.StaticConfig;
+import com.empty.ispy.Chat.model.User;
 import com.empty.ispy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,6 +27,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignUpAct extends AppCompatActivity {
 
@@ -35,6 +44,12 @@ public class SignUpAct extends AppCompatActivity {
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
+    FloatingActionButton fab;
+    CardView cvAdd;
+    private final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    private EditText editTextUsername, editTextPassword, editTextRepeatPassword;
+    public static String STR_EXTRA_ACTION_REGISTER = "register";
 
 
     @Override
@@ -67,8 +82,8 @@ public class SignUpAct extends AppCompatActivity {
         btnjoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = inputEmail.getText().toString().trim();
-                String password = inputPassword.getText().toString().trim();
+                final String email = inputEmail.getText().toString().trim();
+                final String password = inputPassword.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -113,9 +128,17 @@ public class SignUpAct extends AppCompatActivity {
                                         }
                                     });
 
-                            Intent intent =  new Intent(SignUpAct.this,SignInAct.class);
-                            startActivity(intent);
-                            finish();
+
+                                Intent data = new Intent();
+                                data.putExtra(StaticConfig.STR_EXTRA_USERNAME, email);
+                                data.putExtra(StaticConfig.STR_EXTRA_PASSWORD, password);
+                                data.putExtra(StaticConfig.STR_EXTRA_ACTION, STR_EXTRA_ACTION_REGISTER);
+                                setResult(RESULT_OK, data);
+                                initNewUserInfo(email,password);
+                                finish();
+
+
+
 
                         }
                     }
@@ -130,6 +153,17 @@ public class SignUpAct extends AppCompatActivity {
 
 
 
+    }
+    void initNewUserInfo(String e, String p) {
+        User newUser = new User();
+        newUser.email =e;
+        newUser.name = p.substring(0, e.indexOf("@"));
+        newUser.avata = StaticConfig.STR_DEFAULT_BASE64;
+        FirebaseDatabase.getInstance().getReference().child("user/" + auth.getCurrentUser().getUid()).setValue(newUser);
+    }
+    private boolean validate(String emailStr, String password, String repeatPassword) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
+        return password.length() > 0 && repeatPassword.equals(password) && matcher.find();
     }
 
 }

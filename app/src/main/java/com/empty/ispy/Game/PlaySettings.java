@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.empty.ispy.Chat.MainActivity;
 import com.empty.ispy.Generator.RandomString;
 import com.empty.ispy.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +35,7 @@ public class PlaySettings extends AppCompatActivity {
 
     Button btnguide;
     Animation atg, atgtwo, atgthree;
-    ImageView imageView3, crt;
+    ImageView imageView3, crt, message;
     private FirebaseAuth mAuth;
     FirebaseUser currentUser;
     Dialog myDialog;
@@ -55,7 +56,23 @@ public class PlaySettings extends AppCompatActivity {
         atgthree = AnimationUtils.loadAnimation(this, R.anim.atgthree);
 
         nameuser = findViewById(R.id.nameuser);
-        nameuser.setText(currentUser.getDisplayName());
+        try{
+            nameuser.setText(currentUser.getDisplayName());
+
+        }
+        catch (Exception e){
+
+        }
+
+        message=findViewById(R.id.message);
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("asddddddddddddddddddddd");
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         walletuser = findViewById(R.id.walletuser);
         walletuser.setText(currentUser.getEmail());
