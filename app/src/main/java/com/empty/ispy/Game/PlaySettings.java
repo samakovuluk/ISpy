@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class PlaySettings extends AppCompatActivity {
 
@@ -127,12 +128,11 @@ public class PlaySettings extends AppCompatActivity {
                 myDialog.setContentView(R.layout.dialog_connect);
                 final EditText ccc = myDialog.findViewById(R.id.ccc);
                 Button button = myDialog.findViewById(R.id.button);
-                final ProgressDialog progressDialog = new ProgressDialog(PlaySettings.this);
+
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-
+                        final ProgressDialog progressDialog = new ProgressDialog(PlaySettings.this);
                         progressDialog.setMessage("Loading..."); // Setting Message
                         progressDialog.setTitle("ProgressDialog"); // Setting Title
                         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
@@ -145,20 +145,14 @@ public class PlaySettings extends AppCompatActivity {
                         dref.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                if(RT.tt==false) {
-                                    myDialog.dismiss();
-                                    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-                                    RT.tt=true;
-                                    Code.code = ccc.getText().toString();
-                                    Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
-                                    DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child(ccc.getText().toString()).child("setting").child("users");
-                                    DatabaseReference myRef = dref.getRef();
-                                    myRef.child(currentUser.getUid()).setValue(currentUser.getEmail() + ":" + currentUser.getDisplayName());
-                                    Intent intent = new Intent(getApplicationContext(), PlayGame.class);
-                                    startActivity(intent);
-                                    PlaySettings.this.finish();
-                                }
-
+                                Code.code=ccc.getText().toString();
+                                Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                                DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child(ccc.getText().toString()).child("setting").child("users");
+                                DatabaseReference myRef = dref.getRef();
+                                myRef.child(currentUser.getUid()).setValue(currentUser.getEmail()+":"+currentUser.getDisplayName());
+                                Intent intent = new Intent(getApplicationContext(),PlayGame.class);
+                                startActivity(intent);
+                                finish();
 
                             }
                             @Override
@@ -189,14 +183,7 @@ public class PlaySettings extends AppCompatActivity {
                     }
                 });
                 myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                try{
-                    myDialog.show();
-
-                }
-
-                catch (Exception e){
-
-                }
+                myDialog.show();
 
 
             }
