@@ -24,12 +24,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class CreateWait extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseUser currentUser;
-
+    String [] s;
     TextView code;
+    int n;
+    String[] wor;
     TextView num;
     TextView name;
     Button cancel;
@@ -78,8 +81,54 @@ public class CreateWait extends AppCompatActivity {
             public void onClick(View v) {
                 DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child(Code.code).child("start").child("count");
                 dref.setValue(items.size());
+
+                final DatabaseReference ran = FirebaseDatabase.getInstance().getReference().child(Code.code).child("start").child("spy").child("spy");
+                final Random random = new Random();
+                System.out.println(items.size());
+                 n = random.nextInt(items.size());
+                ran.setValue(items.get(n).toString());
+
+
+
+                final DatabaseReference word = FirebaseDatabase.getInstance().getReference().child("word");
+                word.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        String r=dataSnapshot.getValue().toString();
+                        wor=r.split(":");
+                        DatabaseReference pp = FirebaseDatabase.getInstance().getReference().child(Code.code).child("start").child("word").child("word");
+
+                        n = random.nextInt(wor.length);
+                        pp.setValue(wor[n]);
+                        System.out.println("assssssssssssssssssssss");
+                        System.out.println(wor[n]);
+
+                    }
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    }
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+
+
+
+
+
                 Intent intent = new Intent(getApplicationContext(),PlayGame.class);
                 startActivity(intent);
+                final DatabaseReference timer = FirebaseDatabase.getInstance().getReference().child(Code.code).child("start").child("timer");
+                timer.child("timer").setValue(20);
+
                 finish();
 
             }
@@ -109,5 +158,6 @@ public class CreateWait extends AppCompatActivity {
         });
 
     }
+
 
 }

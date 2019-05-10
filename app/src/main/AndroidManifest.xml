@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_account_box"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Game.Voice"></activity>
         <activity android:name=".Game.PlayGame"></activity>
         <activity android:name=".Game.CreateWait" />
         <activity android:name=".SignPackage.SignUpAct" />
@@ -39,7 +40,8 @@
         <activity
             android:name=".Chat.ui.ChatActivity"
             android:parentActivityName=".Chat.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Chat.ui.AddGroupActivity"
             android:theme="@style/MyThemeNoActionbar" />
@@ -47,7 +49,8 @@
         <service
             android:name=".Chat.service.FriendChatService"
             android:exported="false"
-            android:persistent="true" />
+            android:persistent="true"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
