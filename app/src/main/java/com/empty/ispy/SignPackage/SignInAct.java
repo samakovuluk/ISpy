@@ -97,12 +97,13 @@ protected void onStop() {
             }
         };
     }
+    public static FirebaseUser currentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginn);
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
 
         if (currentUser!=null){
             Intent intent = new Intent(getApplicationContext(), Home.class);
@@ -133,7 +134,7 @@ protected void onStop() {
         btnget2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = inputEmail.getText().toString();
+                final String email = inputEmail.getText().toString();
                 final String password = inputPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
@@ -182,10 +183,11 @@ protected void onStop() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                FirebaseUser uu= mAuth.getCurrentUser();
                 HashMap hashUser = (HashMap) dataSnapshot.getValue();
                 User userInfo = new User();
-                userInfo.name = (String) hashUser.get("name");
-                userInfo.email = (String) hashUser.get("email");
+                userInfo.name = uu.getDisplayName();
+                userInfo.email = uu.getEmail();
                 userInfo.avata = (String) hashUser.get("avata");
                 SharedPreferenceHelper.getInstance(SignInAct.this).saveUserInfo(userInfo);
             }

@@ -13,15 +13,20 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.empty.ispy.Chat.MainActivity;
 import com.empty.ispy.Generator.RandomString;
 import com.empty.ispy.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -119,6 +124,68 @@ public class PlaySettings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
+                myDialog.setContentView(R.layout.dialog_connect);
+                final EditText ccc = myDialog.findViewById(R.id.ccc);
+                Button button = myDialog.findViewById(R.id.button);
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final ProgressDialog progressDialog = new ProgressDialog(PlaySettings.this);
+                        progressDialog.setMessage("Loading..."); // Setting Message
+                        progressDialog.setTitle("ProgressDialog"); // Setting Title
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+                        progressDialog.show(); // Display Progress Dialog
+                        progressDialog.setCancelable(false);
+
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+                        DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child(ccc.getText().toString());
+                        dref.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                Code.code=ccc.getText().toString();
+                                Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                                DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child(ccc.getText().toString()).child("setting").child("users");
+                                DatabaseReference myRef = dref.getRef();
+                                myRef.child(currentUser.getUid()).setValue(currentUser.getEmail()+":"+currentUser.getDisplayName());
+                                Intent intent = new Intent(getApplicationContext(),PlayGame.class);
+                                startActivity(intent);
+                                finish();
+
+                            }
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                                Toast.makeText(getApplicationContext(),"Invalid",Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            }
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                                Toast.makeText(getApplicationContext(),"Invalid",Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            }
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                                Toast.makeText(getApplicationContext(),"Invalid",Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Toast.makeText(getApplicationContext(),"Invalid",Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            }
+                        });
+                        progressDialog.dismiss();
+
+
+
+                    }
+                });
+                myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                myDialog.show();
+
+
             }
         });
     }
@@ -200,6 +267,11 @@ public class PlaySettings extends AppCompatActivity {
 
         progressDialog.setTitle(code);
         progressDialog.setMessage("Success");
+        Intent intent = new Intent(getApplicationContext(),CreateWait.class);
+        Code.code=code;
+        startActivity(intent);
+
+
 
 
 

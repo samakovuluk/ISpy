@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.empty.ispy.Chat.model.User;
 import com.empty.ispy.Chat.ui.UserProfileFragment;
+import com.empty.ispy.SignPackage.SignInAct;
 
 
 public class SharedPreferenceHelper {
@@ -30,8 +31,8 @@ public class SharedPreferenceHelper {
     }
 
     public void saveUserInfo(User user) {
-        editor.putString(SHARE_KEY_NAME, UserProfileFragment.current.getDisplayName());
-        editor.putString(SHARE_KEY_EMAIL, UserProfileFragment.current.getEmail());
+        editor.putString(SHARE_KEY_NAME, user.name);
+        editor.putString(SHARE_KEY_EMAIL, user.email);
         editor.putString(SHARE_KEY_UID, StaticConfig.UID);
         editor.apply();
     }

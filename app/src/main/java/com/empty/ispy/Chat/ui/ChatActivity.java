@@ -74,7 +74,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         editWriteMessage = (EditText) findViewById(R.id.editWriteMessage);
         if (idFriend != null && nameFriend != null) {
-            getSupportActionBar().setTitle(nameFriend);
+            try{
+            getSupportActionBar().setTitle(nameFriend);}
+            catch (Exception e){
+
+            }
             linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             recyclerChat = (RecyclerView) findViewById(R.id.recyclerChat);
             recyclerChat.setLayoutManager(linearLayoutManager);

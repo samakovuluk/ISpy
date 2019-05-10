@@ -473,12 +473,11 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         intent.putCharSequenceArrayListExtra(StaticConfig.INTENT_KEY_CHAT_ID, idFriend);
                         intent.putExtra(StaticConfig.INTENT_KEY_CHAT_ROOM_ID, idRoom);
                         ChatActivity.bitmapAvataFriend = new HashMap<>();
-                        if (!avata.equals(StaticConfig.STR_DEFAULT_BASE64)) {
-                            byte[] decodedString = Base64.decode(avata, Base64.DEFAULT);
-                            ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
-                        } else {
+
+
+
                             ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avata));
-                        }
+
 
                         mapMark.put(id, null);
                         fragment.startActivityForResult(intent, FriendsFragment.ACTION_START_CHAT);
@@ -590,12 +589,16 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mapMark.put(id, true);
             }
         }
+        try{
         if (listFriend.getListFriend().get(position).avata.equals(StaticConfig.STR_DEFAULT_BASE64)) {
             ((ItemFriendViewHolder) holder).avata.setImageResource(R.drawable.default_avata);
         } else {
             byte[] decodedString = Base64.decode(listFriend.getListFriend().get(position).avata, Base64.DEFAULT);
             Bitmap src = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             ((ItemFriendViewHolder) holder).avata.setImageBitmap(src);
+        }}
+        catch (Exception e){
+
         }
 
 
