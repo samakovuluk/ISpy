@@ -11,8 +11,8 @@
         android:roundIcon="@mipmap/ic_account_box"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Game.Voice"></activity>
-        <activity android:name=".Game.PlayGame"></activity>
+
+        <activity android:name=".Game.PlayGame" />
         <activity android:name=".Game.CreateWait" />
         <activity android:name=".SignPackage.SignUpAct" />
         <activity android:name=".Menu.ConThemeAct" />
@@ -25,6 +25,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".Game.PlaySettings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Game.Voice">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,6 +58,9 @@
             android:exported="false"
             android:persistent="true"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Game.Result">
+
+        </activity>
     </application>
 
 </manifest>

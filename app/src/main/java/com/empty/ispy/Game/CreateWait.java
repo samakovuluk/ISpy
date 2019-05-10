@@ -119,9 +119,11 @@ public class CreateWait extends AppCompatActivity {
                     }
                 });
 
-
-
-
+                for (int i=0;i<items.size();i++) {
+                    final DatabaseReference dr = FirebaseDatabase.getInstance().getReference().child(Code.code).child("result").child("users").child("user").child(items.get(i).split(":")[0]
+                            .replace("@", "").replace(".", ""));
+                    dr.setValue(0);
+                }
 
 
                 Intent intent = new Intent(getApplicationContext(),PlayGame.class);
