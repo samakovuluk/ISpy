@@ -7,21 +7,17 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Spy and Hunt"
         android:roundIcon="@mipmap/ic_account_box"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<<<<<<< HEAD
 
         <activity android:name=".Game.PlayGame" />
-=======
-        <activity android:name=".Game.PlayGame"></activity>
->>>>>>> parent of 2b6769d... last
         <activity android:name=".Game.CreateWait" />
         <activity android:name=".SignPackage.SignUpAct" />
         <activity android:name=".Menu.ConThemeAct" />
         <activity android:name=".Menu.Home" />
-        <activity android:name=".SignPackage.SignInAct">
+        <activity android:name="com.empty.ispy.SignPackage.SignInAct">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,7 +47,8 @@
         <activity
             android:name=".Chat.ui.ChatActivity"
             android:parentActivityName=".Chat.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Chat.ui.AddGroupActivity"
             android:theme="@style/MyThemeNoActionbar" />
@@ -59,15 +56,11 @@
         <service
             android:name=".Chat.service.FriendChatService"
             android:exported="false"
-<<<<<<< HEAD
             android:persistent="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Game.Result">
 
         </activity>
-=======
-            android:persistent="true" />
->>>>>>> parent of 2b6769d... last
     </application>
 
 </manifest>

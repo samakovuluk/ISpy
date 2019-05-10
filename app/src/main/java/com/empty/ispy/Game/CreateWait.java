@@ -24,12 +24,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class CreateWait extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseUser currentUser;
-
+    String [] s;
     TextView code;
+    int n;
+    String[] wor;
     TextView num;
     TextView name;
     Button cancel;
@@ -78,7 +81,6 @@ public class CreateWait extends AppCompatActivity {
             public void onClick(View v) {
                 DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child(Code.code).child("start").child("count");
                 dref.setValue(items.size());
-<<<<<<< HEAD
 
                 final DatabaseReference ran = FirebaseDatabase.getInstance().getReference().child(Code.code).child("start").child("spy").child("spy");
                 final Random random = new Random();
@@ -124,10 +126,11 @@ public class CreateWait extends AppCompatActivity {
                 }
 
 
-=======
->>>>>>> parent of 2b6769d... last
                 Intent intent = new Intent(getApplicationContext(),PlayGame.class);
                 startActivity(intent);
+                final DatabaseReference timer = FirebaseDatabase.getInstance().getReference().child(Code.code).child("start").child("timer");
+                timer.child("timer").setValue(20);
+
                 finish();
 
             }
@@ -157,5 +160,6 @@ public class CreateWait extends AppCompatActivity {
         });
 
     }
+
 
 }
