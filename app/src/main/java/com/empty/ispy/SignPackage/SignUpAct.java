@@ -65,7 +65,7 @@ public class SignUpAct extends AppCompatActivity {
 
         inputEmail = (EditText) findViewById(R.id.editText2);
         inputPassword = (EditText) findViewById(R.id.editText5);
-        editText3 = (EditText) findViewById(R.id.editText3);
+
         editText7 = (EditText) findViewById(R.id.editText7);
 
         btnjoin.startAnimation(frombottom);
@@ -74,7 +74,7 @@ public class SignUpAct extends AppCompatActivity {
 
         inputEmail.startAnimation(fromtop);
         inputPassword.startAnimation(fromtop);
-        editText3.startAnimation(fromtop);
+
         editText7.startAnimation(fromtop);
 
 

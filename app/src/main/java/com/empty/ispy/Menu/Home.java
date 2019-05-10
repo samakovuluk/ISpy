@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.empty.ispy.Game.PlaySettings;
+import com.empty.ispy.Game.Practice;
 import com.empty.ispy.R;
 import com.empty.ispy.SignPackage.SignInAct;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +28,18 @@ public class Home extends AppCompatActivity {
         final FirebaseUser currentUser = mAuth.getCurrentUser();
         but1 = findViewById(R.id.but1);
         but2 = findViewById(R.id.but2);
-        but3 = findViewById(R.id.but3);
+
+        but2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Practice.class);
+                startActivity(intent );
+
+
+            }
+        });
+
+
         but4 = findViewById(R.id.but4);
 
         but1.setOnClickListener(new View.OnClickListener() {
